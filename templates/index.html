@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voter Management System</title>
+</head>
+<body>
+<div class="jumbotron text-center">
+    <h1>Login to Voter Management System</h1>
+</div>
+<div class="col-12">
+    <div class="row">
+        <div class="col-3">
+            <!-- Advertisement Section -->
+        </div>
+        <div class="col-6">
+            <form action="/polls/login/" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="voter_name">Voter Name: </label>
+                    <input type="text" class="form-control" id="voter_name" name="voter_name">
+                </div>
+                <div class="form-group">
+                    <label for="voter_number">Voter Number: </label>
+                    <input type="text" class="form-control" id="voter_number" name="voter_number">
+                </div>
+                <input type="submit" value="Login" class="btn btn-primary"/>
+            </form>
+            <div>
+                <p>Don't have an account?  <a href="signup.html"> Sign up</a></p>
+            </div>
+            <div>
+                <p>Click here to check voter<a href="details.html"> details</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
