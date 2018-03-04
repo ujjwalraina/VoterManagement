@@ -1,7 +1,11 @@
 from django.shortcuts import render
+from rest_framework.decorators import api_view
+
+from .serializers import VoterSerializer
 # Create your views here.
 from django.http import HttpResponse
 from .models import Voter,Party
+from rest_framework.response import Response
 
 def index(request):
     return render(request,'index.html')
@@ -12,16 +16,16 @@ def details(request):
 def result(request):
     number = request.POST.get("voter_number")
     V = Voter.objects.filter(voter_number=number)
-    if V.count()==1:
-        a=[]
-        a=V.values_list()
-        name=a[0][1]
+    if V.count() == 1:
+        a = []
+        a = V.values_list()
+        name = a[0][1]
         address = a[0][3]
         father_name = a[0][4]
         sex = a[0][5]
         date_of_birth = a[0][6]
-        str1 = "<h1>Details of voter-number: "+number+"\n</h1>"
-        str2 = "<p>Voter-name: "+name+"\n</p>"
+        str1 = "<h1>Details of voter-number: " + number + "\n</h1>"
+        str2 = "<p>Voter-name: " + name + "\n</p>"
         str3 = "<p>Address: " + address + "\n</p>"
         str4 = "<p>Father-name: " + father_name + "\n</p>"
         str5 = "<p>Sex: " + sex + "\n</p>"
@@ -31,18 +35,18 @@ def result(request):
     else:
         return HttpResponse("The voter number you have entered is incorrect")
 
+
 def sign(request):
     return render(request,'signup.html')
 
 def vote(request):
-    v = Voter()
-    p = Party()
+    number = request.POST.get('voterid')
+    v = Voter.objects.filter(voter_number=number)
     v.vote_value = True
     party = request.POST.get("party")
-    p.party_name = party
-    v.save()
-    p.save()
-    return HttpResponse("Thank you for casting your vote.")
+    v.vote_for = party
+    v.update(vote_value=True,vote_for=party)
+    return HttpResponse("Thank you for casting your vote")
 
 def signup(request):
     if request.method == "POST":
@@ -60,6 +64,7 @@ def signup(request):
         V.sex = sex
         V.date_of_birth = dob
         V.vote_value = False
+        V.vote_for = "None"
         V.save()
         return render(request, 'index.html')
     else:
@@ -71,7 +76,7 @@ def login(request):
         number = request.POST.get("voter_number")
         sc = Voter.objects.filter(voter_number=number,voter_name=name)
         if sc.count()== 1:
-            return render(request, 'vote.html')
+            return render(request, 'vote.html', {'number': str(number)},print({number}))
         else:
             return HttpResponse('Username or password is wrong')
     else:
