@@ -98,6 +98,6 @@ def login(request):
         if sc.count()== 1:
             return render(request, 'vote.html', {'number': str(number)})
         else:
-            return HttpResponse('Username or password is wrong OR Voter has already casted his vote')
+            return HttpResponse('Username-password combination entered wrong OR Voter has already casted his vote')
     else:
         return HttpResponse('You have clicked on button through get method')
