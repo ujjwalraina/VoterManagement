@@ -17,7 +17,7 @@ class Voter(models.Model):
     sex = models.CharField(max_length=6)
     date_of_birth = models.DateField()
     vote_for = models.CharField(max_length=20)
-    vote_value = models.BooleanField()
+    vote_value = models.BooleanField(default=False)
 
     def __str__(self):
         return  self.voter_name

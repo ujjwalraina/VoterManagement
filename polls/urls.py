@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'vote/', views.vote, name='vote'),
     url(r'signup.html/', views.sign, name='sign'),
     url(r'details.html/', views.details, name ='details'),
+    url(r'voterinfo/', views.voterinfo, name ='voterinfo'),
     url(r'result/', views.result, name ='result'),
 ]

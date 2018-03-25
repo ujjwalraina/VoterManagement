@@ -18,10 +18,11 @@
             <form action="/polls/vote/" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
+                    <input type="hidden" class="form-control" id="party" name="voterid" value={{ number }} />
                     <label for="party">Party: </label>
-                    <input type="checkbox" class="form-control" id="party" name="party" value="AAP"> AAP
-			        <input type="checkbox" class="form-control" id="party" name="party" value="BJP"/> BJP
-                    <input type="checkbox" class="form-control" id="party" name="party" value="CONGRESS"/> CONGRESS
+                    <input type="radio" class="form-control" id="party" name="party" value="AAP"> AAP
+                    <input type="radio" class="form-control" id="party" name="party" value="BJP"> BJP
+                    <input type="radio" class="form-control" id="party" name="party" value="CONGRESS"> CONGRESS
                 </div>
                 <input type="submit" value="Vote" class="btn btn-primary"/>
             </form>
