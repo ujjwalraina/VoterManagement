@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 from .models import Voter, Party
-
+import datetime
 
 def index(request):
     return render(request,'index.html')
@@ -65,7 +65,9 @@ def vote(request):
     v = Voter.objects.filter(voter_number=number)
     party = request.POST.get("party")
     v.update(vote_value=True,vote_for=party)
-    return HttpResponse("Thank you for casting your vote")
+    data = request.COOKIES['uid']
+    logintime=request.COOKIES['logintime']
+    return HttpResponse("Thank you for casting your vote "+str(data)+" | login time "+str(logintime))
 
 
 def signup(request):
@@ -96,7 +98,15 @@ def login(request):
         number = request.POST.get("voter_number")
         sc = Voter.objects.filter(voter_number=number,voter_name=name,vote_value=False)
         if sc.count()== 1:
-            return render(request, 'vote.html', {'number': str(number)})
+            #HttpResponse.set_cookie("uid",str(number)) # uid is key which works like global variable , and name is data
+            #return render(request, 'vote.html', {'number': str(number)})
+            reponse = render(request, 'vote.html', {'number': str(number)}) #response is a variable which stores an object
+            reponse.set_cookie('uid',str(number),6000)
+
+            reponse.set_cookie('logintime', datetime.datetime.now())
+
+
+            return reponse
         else:
             return HttpResponse('Username-password combination entered wrong OR Voter has already casted his vote')
     else:
