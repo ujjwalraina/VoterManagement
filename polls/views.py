@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Voter, Party
 import datetime
+from django.conf import settings
+from django.core.mail import send_mail
 
 def index(request):
     return render(request,'index.html')
@@ -65,9 +67,17 @@ def vote(request):
     v = Voter.objects.filter(voter_number=number)
     party = request.POST.get("party")
     v.update(vote_value=True,vote_for=party)
-    data = request.COOKIES['uid']
+    data1 = request.COOKIES['uid']
+    data2 = request.COOKIES['name']
     logintime=request.COOKIES['logintime']
-    return HttpResponse("Thank you for casting your vote "+str(data)+" | login time "+str(logintime))
+
+    #email
+    subject = "Election log"
+    message = "The following user has casted his vote: "+str(data1)+" "+str(data2)
+    from_email = settings.EMAIL_HOST_USER
+    to_list = [settings.EMAIL_TO_LIST,settings.EMAIL_HOST_USER]
+    send_mail(subject,message,from_email,to_list,fail_silently=True)
+    return HttpResponse("Thank you for casting your vote: "+str(data2)+" | login time "+str(logintime) +" "+message)
 
 
 def signup(request):
@@ -98,14 +108,10 @@ def login(request):
         number = request.POST.get("voter_number")
         sc = Voter.objects.filter(voter_number=number,voter_name=name,vote_value=False)
         if sc.count()== 1:
-            #HttpResponse.set_cookie("uid",str(number)) # uid is key which works like global variable , and name is data
-            #return render(request, 'vote.html', {'number': str(number)})
             reponse = render(request, 'vote.html', {'number': str(number)}) #response is a variable which stores an object
-            reponse.set_cookie('uid',str(number),6000)
-
+            reponse.set_cookie('uid',str(number),6000) #uid is key which works like global variable , and name is data
+            reponse.set_cookie('name',name, 6000)
             reponse.set_cookie('logintime', datetime.datetime.now())
-
-
             return reponse
         else:
             return HttpResponse('Username-password combination entered wrong OR Voter has already casted his vote')
