@@ -16,6 +16,7 @@ class Voter(models.Model):
     father_name = models.CharField(max_length=32)
     sex = models.CharField(max_length=6)
     date_of_birth = models.DateField()
+    contact_number = models.CharField(max_length=13)
     vote_for = models.CharField(max_length=20)
     vote_value = models.BooleanField(default=False)
 

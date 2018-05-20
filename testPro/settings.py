@@ -17,6 +17,11 @@ EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_PORT = EMAIL_PORT
 EMAIL_TO_LIST = EMAIL_TO_LIST
 
+from .sms_info import SMS_ACCOUNT_SID,SMS_AUTH_TOKEN,SMS_FROM
+SMS_ACCOUNT_SID = SMS_ACCOUNT_SID
+SMS_AUTH_TOKEN = SMS_AUTH_TOKEN
+SMS_FROM = SMS_FROM
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -46,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'polls.apps.PollsConfig',
     'rest_framework',
+    'django_twilio',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +125,13 @@ REST_FRAMEWORK = {
     )
 }
 
+CACHES = {
+   'default': {
+      'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+      'LOCATION': '127.0.0.1:11211',
+   }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -131,7 +144,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
