@@ -33,10 +33,19 @@ def result(request):
         statement0 = "<h1>RESULTS: " + str(party3) + " won the election.</h1>"
     else:
         statement0 = "No single party got the majority."
-    statement1 = "<p>" + str(party1) + " got " + str(count1) + " votes.\n</p>"
+    statement1 = "<html><p>" + str(party1) + " got " + str(count1) + " votes.\n</p>"
     statement2 = "<p>" + str(party2) + " got " + str(count2) + " votes.\n</p>"
     statement3 = "<p>" + str(party3) + " got " + str(count3) + " votes.\n</p>"
-    statement = statement0 + statement1 + statement2 + statement3
+    statement4 = "<body><div id=\"piechart\"></div><script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\">" \
+                 "</script><script type=\"text/javascript\">" \
+                 "google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);" \
+                 "function drawChart() {var data = google.visualization.arrayToDataTable([['Party', 'No. of votes'],['BJP',"+str(count1)+"],['CONGRESS',"+str(count2)+"], ['AAP',"+str(count3)+"]]);" \
+                 "var options = {'title':'Vote Distribution','fontSize':14, 'width':550, 'height':400, 'colors':['#ff9933','#00ff00','#4169e1']};" \
+                 "var chart = new google.visualization.PieChart(document.getElementById('piechart'));" \
+                 "chart.draw(data, options)}</script></body></html>"
+
+    statement = statement0 + statement1 + statement2 + statement3 + statement4
+
     return HttpResponse(statement)
 
 
